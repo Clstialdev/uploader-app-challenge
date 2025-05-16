@@ -4,6 +4,8 @@
 
 This project implements a robust and user-friendly interface for uploading textual content alongside image attachments. Designed with React and TypeScript, and styled using Material-UI (MUI), it supports both drag-and-drop and traditional file selection workflows. Sent messages are displayed in a scrollable list, with features for selection, bulk actions, and exporting data.
 
+**Live Demo:** [https://uploader-app-challenge.vercel.app/](https://uploader-app-challenge.vercel.app/)
+
 ---
 
 ## Key Features
