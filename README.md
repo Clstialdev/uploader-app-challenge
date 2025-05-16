@@ -6,6 +6,8 @@ This project implements a robust and user-friendly interface for uploading textu
 
 **Live Demo:** [https://uploader-app-challenge.vercel.app/](https://uploader-app-challenge.vercel.app/)
 
+![App Screenshot](screenshot.png "App Screenshot")
+
 ---
 
 ## Key Features
