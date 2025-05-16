@@ -54,7 +54,6 @@ const SentItem: React.FC<Props> = ({ item, onUpdate, onDelete, onExport }) => {
             gap: 1,
             flexWrap: "nowrap",
             mb: 2,
-            boxShadow: 2,
             borderRadius: 1,
             maxWidth: "100%",
             overflowX: "auto",
