@@ -1,49 +1,113 @@
-# React + TypeScript:  Text + Image Uploader
+# Text & Image Uploader
 
-## Overview
+## Project Overview
 
-Build an interface where users can:
-- Type a text.
-- Attach one or more images via drag-drop **or** by clicking the paperclip icon (images only).
-- Preview and remove attachments before sending.
-- Send the message to a scrollable “Sent Items” list.
-- Select sent items (via checkboxes) for bulk deletion or export.
+This project implements a robust and user-friendly interface for uploading textual content alongside image attachments. Designed with React and TypeScript, and styled using Material-UI (MUI), it supports both drag-and-drop and traditional file selection workflows. Sent messages are displayed in a scrollable list, with features for selection, bulk actions, and exporting data.
 
-The top bar (text input + image input + Send button) must always be visible to the user.
+---
 
-Use Material-UI, React, and TypeScript.
-You can add any validation, improvement, error handling, UI change, etc that improves the final product.
+## Key Features
 
-## Functional Requirements
+- **Text Input**  
+  Users can input multi-line text with some validation.
 
-1. **Text + Drag-Drop**  
-   - TextField accepts text.
-   - Dragging images over the text area shows a warning to the user somehow: "Drop to upload the image"
-   - Files dropped elsewhere in the app do nothing.
+- **Image Attachment Support**
 
-2. **Attachment Button**  
-   - A button opens the file picker (accepts only images).
-   - Selected images appear as thumbnails somewhere in the bar.
-   - Each thumbnail has a small “remove” icon before sending it.
+  - Attach images via drag-and-drop directly onto the input area.
+  - Attach images using a file picker dialog limited to image file types.
+  - Preview attached images as thumbnails with options to remove before sending.
 
-3. **Send**  
-   - Clicking Send (disabled if no text & no attachments) adds a new message to the list.
-   - After send, text and attachments clear.
+- **Drag-and-Drop Feedback**
 
-4. **Sent Items**  
-   - Each item shows text and image thumbnails. This thumbnails are not deletable.
-   - Items are selectable.
-   - Per-item actions: Delete (removes item), Export (downloads a JSON blob with `{ text: string|null, files: string[] }`).
-   - Bulk actions appear above list when ≥1 item selected: Delete Selected, Export Selected.
+  - Visual cues notify users when dragging images over the input area, indicating readiness for drop.
+  - Use of React Portals for Modals. uses React Portals to render modal components such as the drag-and-drop feedback overlay (DragOverlayToast).
 
-5. **Layout & Styling**  
-   - Use MUI components.
-   - There's a theme implemented. Try to maximize the use of it.
-   - Choose responsive behavior when possible to do.
+- **Message Sending**  
+  Messages (text + images) can be sent once validated. Sent items are cleared from the input area after sending.
 
-## Technical Specs
+- **Sent Items Management**
 
-- **Framework:** React 18+, TypeScript  
-- **Styling & UI:** @mui/material, @mui/icons-material  
-- **State Management:** React hooks only  
-- **File Handling:** `URL.createObjectURL` / `.revokeObjectURL`  
+  - Displays all sent messages in a scrollable container.
+  - Each message displays text and associated image thumbnails (non-editable).
+  - Items are selectable via checkboxes for bulk operations.
+  - Supports individual and bulk deletion of sent items.
+  - Allows export of selected items as JSON files containing text and image metadata.
+
+- **Accessibility & Responsiveness**  
+  Designed to be responsive and accessible, ensuring usability across devices and for diverse user needs.
+
+---
+
+## Technologies & Tools
+
+- **Framework:** React 18+
+- **Language:** TypeScript
+- **UI Library:** Material-UI (MUI) — components and icons
+- **State Management:** React Hooks (`useState`, `useEffect`, `useRef`)
+- **File Handling:** Uses `URL.createObjectURL` for efficient image previews and cleans up resources with `URL.revokeObjectURL`
+- **Unique ID Generation:** `nanoid` for stable unique keys and identifiers
+
+---
+
+## Architecture & Design
+
+- **Component Structure:**
+
+  - `App`: Main container managing overall state and UI layout.
+  - `UploaderBar`: Input section with text input, drag-drop zone, image previews, and send functionality.
+  - `SentItem`: Represents individual sent messages with text, images, selection checkbox, and item actions (delete/export).
+  - `AttachmentThumbnail`: Thumbnail preview component with removal option for attached images.
+
+- **State Flow:**
+
+  - Sent items stored in `App` state as an array of objects containing text, attachments, and selection status.
+  - `UploaderBar` manages input text and attachments locally before sending.
+  - Parent component handles bulk operations and updates the sent items list accordingly.
+
+- **User Interaction:**
+  - Drag events are scoped strictly to the text input area to prevent unintended drops elsewhere.
+  - Validation prevents sending empty messages or attachments only without text.
+  - UI feedback is provided for drag-over states, errors, and action availability.
+
+---
+
+## Installation & Setup
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/Clstialdev/uploader-app-challenge.git
+   cd uploader-app-challenge
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
+
+3. Run the development server:
+
+   ```bash
+   npm start
+   # or
+   yarn start
+   # or
+   pnpm start
+   ```
+
+4. Open the app at `http://localhost:5173`
+
+---
+
+## Usage Notes
+
+- Dragging non-image files over the input area is ignored.
+- Image previews are generated on the fly and revoked on cleanup to prevent memory leaks.
+- Exported JSON files contain an array of messages, each with text and an array of attached image file metadata (name and preview URL).
+- Bulk actions become available only when one or more sent items are selected.
+- The top input bar remains fixed and accessible regardless of scrolling through sent messages.
