@@ -6,6 +6,7 @@ import { Box, Button, Input, styled } from "@mui/material";
 // import SendIcon from "@mui/icons-material/Send";
 import { CloudCircleOutlined } from "@mui/icons-material";
 import { nanoid } from "nanoid";
+import DragOverlayModal from "./DragOverlayModal";
 
 interface Props {
   onSend: (text: string, attachments: IAttachment[]) => void;
@@ -27,6 +28,7 @@ const UploaderBar: React.FC<Props> = ({ onSend }) => {
   const [text, setText] = useState("");
   const [attachments, setAttachments] = useState<IAttachment[]>([]);
   const [dragOver, setDragOver] = useState(false);
+  const [showDragModal, setShowDragModal] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -47,16 +49,19 @@ const UploaderBar: React.FC<Props> = ({ onSend }) => {
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragOver(true);
+    setShowDragModal(true);
   };
 
   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragOver(false);
+    setShowDragModal(false);
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragOver(false);
+    setShowDragModal(false);
 
     const files = e.dataTransfer?.files;
     if (files && files.length > 0) {
@@ -124,6 +129,9 @@ const UploaderBar: React.FC<Props> = ({ onSend }) => {
         />
       </Button>
       {/* Optional: Render drag-overlay when dragOver is true */}
+      {showDragModal ? (
+        <DragOverlayModal onClose={() => setShowDragModal(false)} />
+      ) : null}
       {attachments.map((attachment) => (
         <img
           key={attachment.id}
