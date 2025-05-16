@@ -27,6 +27,7 @@ const SentItem: React.FC<Props> = ({ item, onUpdate, onDelete, onExport }) => {
           ? "2px solid rgba(0,0,200,0.2)"
           : "1px solid rgba(0,0,0,0.1)",
         width: "100%",
+        my: 1,
       }}
     >
       <Checkbox
