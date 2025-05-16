@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import UploaderBar from "./components/UploaderBar";
 import SentItem from "./components/SentItem";
 import type { IAttachment, ISentItem } from "./types";
 import { nanoid } from "nanoid";
+import { DownloadOutlined, DeleteOutlineRounded } from "@mui/icons-material";
 
 const App: React.FC = () => {
   const [sentItems, setSentItems] = useState<ISentItem[]>([]);
@@ -30,7 +31,6 @@ const App: React.FC = () => {
     return sentItems.filter((item) => item.selected).map((item) => item.id);
   }
 
-  // Note: This file is getting long, maybe creating a utils file for these functions would be best
   function handleExport(ids: string[]) {
     const itemsToExport = sentItems.filter((item) => ids.includes(item.id));
 
@@ -71,31 +71,136 @@ const App: React.FC = () => {
     );
   }
 
+  const hasItems = sentItems.length > 0;
+
   return (
-    <Box>
-      Render the page here
-      <UploaderBar onSend={handleSend} />
-      {/* TODO: Bulk actions */}
-      {getSelectedItemIds().length > 0 ? (
-        <Box>
-          <Button onClick={() => handleExport(getSelectedItemIds())}>
-            Export
-          </Button>
-          <Button onClick={() => handleDelete(getSelectedItemIds())}>
-            Delete
-          </Button>
+    <Box
+      sx={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        p: { xs: 2, sm: 4, md: 6 },
+        bgcolor: "#f0f0f0",
+        boxSizing: "border-box",
+      }}
+    >
+      {!hasItems ? (
+        // Centered Sphere GIF + message
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 4,
+            textAlign: "center",
+          }}
+        >
+          {/* Sphere GIF */}
+          <Box
+            sx={{
+              width: 120,
+              height: 120,
+              bgcolor: "transparent",
+              borderRadius: "50%",
+              overflow: "hidden",
+            }}
+          >
+            <img
+              src="/sphere.gif"
+              alt=""
+              style={{
+                height: "100%",
+                width: "100%",
+                objectFit: "cover",
+                display: "block",
+                mixBlendMode: "difference",
+                filter:
+                  "brightness(1) saturate(100%) sepia(1) hue-rotate(180deg) saturate(2)",
+              }}
+            />
+          </Box>
+          <Typography
+            variant="h4"
+            fontWeight="bold"
+            color="text.primary"
+            mb={2}
+          >
+            How Can I Help You Today?
+          </Typography>
         </Box>
-      ) : null}
-      {/* TODO: map items to their respective components */}
-      {sentItems.map((item) => (
-        <SentItem
-          key={item.id}
-          item={item}
-          onUpdate={handleUpdate}
-          onDelete={() => handleDeleteItem(item.id)}
-          onExport={() => handleExport([item.id])}
-        />
-      ))}
+      ) : (
+        <>
+          {/* Selected items and bulk actions */}
+          <Box
+            sx={{
+              height: 60,
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              mb: 2,
+              px: 2,
+            }}
+          >
+            <Box display="flex" alignItems="center" gap={2}>
+              {getSelectedItemIds().length > 0 ? (
+                <Typography fontWeight="bold">{`Selected ${
+                  getSelectedItemIds().length
+                } items`}</Typography>
+              ) : null}
+              <Button
+                onClick={() => handleExport(getSelectedItemIds())}
+                color="primary"
+                variant="contained"
+                sx={{ opacity: 0.8 }}
+                aria-label="Export"
+                disabled={getSelectedItemIds().length < 1}
+              >
+                <DownloadOutlined />
+              </Button>
+              <Button
+                onClick={() => handleDelete(getSelectedItemIds())}
+                color="error"
+                sx={{ opacity: 0.8 }}
+                variant="contained"
+                aria-label="Delete"
+                disabled={getSelectedItemIds().length < 1}
+              >
+                <DeleteOutlineRounded />
+              </Button>
+            </Box>
+          </Box>
+
+          {/* Scrollable container */}
+          <Box
+            sx={{
+              flexGrow: 1,
+              overflowY: "auto",
+              bgcolor: "white",
+              borderRadius: 3,
+              p: 3,
+              boxShadow: 1,
+              maxWidth: "100%",
+              gap: 2,
+            }}
+          >
+            {sentItems.map((item) => (
+              <SentItem
+                key={item.id}
+                item={item}
+                onUpdate={handleUpdate}
+                onDelete={() => handleDeleteItem(item.id)}
+                onExport={() => handleExport([item.id])}
+              />
+            ))}
+          </Box>
+        </>
+      )}
+      {/* UploaderBar */}
+      <Box sx={{ mt: 2, width: "100%", maxWidth: "100%" }}>
+        <UploaderBar onSend={handleSend} />
+      </Box>
     </Box>
   );
 };
