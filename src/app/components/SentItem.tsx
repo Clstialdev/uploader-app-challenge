@@ -27,16 +27,16 @@ const SentItem: React.FC<Props> = ({ item, onUpdate, onDelete, onExport }) => {
       {/* Sent text */}
       {item.text}
       {/* Sent attachments if any*/}
-      {item.attachments &&
-        item.attachments.length > 0 &&
-        item.attachments.map((attachment) => (
-          <img
-            key={attachment.id}
-            src={attachment.previewUrl}
-            alt={`${attachment.file.name} - preview`}
-            height={200}
-          />
-        ))}
+      {item.attachments && item.attachments.length > 0
+        ? item.attachments.map((attachment) => (
+            <img
+              key={attachment.id}
+              src={attachment.previewUrl}
+              alt={`${attachment.file.name} - preview`}
+              height={200}
+            />
+          ))
+        : null}
     </Box>
   );
 };

@@ -77,7 +77,11 @@ const UploaderBar: React.FC<Props> = ({ onSend }) => {
     setAttachments((prev) => prev.filter((attachment) => attachment.id !== id));
   }
 
-  // TODO: onSend -> invoke onSend(text, attachments), reset text & attachments
+  function handleSendItem() {
+    onSend(text, attachments);
+    setText("");
+    setAttachments([]);
+  }
 
   // Cleanup for the image previewUrls
   useEffect(() => {
@@ -103,7 +107,7 @@ const UploaderBar: React.FC<Props> = ({ onSend }) => {
       >
         <Input value={text} onChange={(e) => setText(e.target.value)} />
       </Box>
-      <Button>Send Button</Button>
+      <Button onClick={handleSendItem}>Send Button</Button>
       <Button
         component="label"
         role={undefined}
@@ -112,6 +116,7 @@ const UploaderBar: React.FC<Props> = ({ onSend }) => {
         startIcon={<CloudCircleOutlined />}
       >
         Upload files
+        {/* TODO: Make it only accept images */}
         <VisuallyHiddenInput
           type="file"
           onChange={(event) => onFileChange(event.target.files)}
