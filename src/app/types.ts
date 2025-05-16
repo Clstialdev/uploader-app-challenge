@@ -5,7 +5,7 @@ export interface IAttachment {
 }
 
 export interface ISentItem {
-  id: number;
+  id: string;
   text: string | null;
   attachments: IAttachment[];
   selected: boolean;
