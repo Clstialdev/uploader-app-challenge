@@ -6,7 +6,7 @@ import { Box, Button, Input, styled } from "@mui/material";
 // import SendIcon from "@mui/icons-material/Send";
 import { CloudCircleOutlined } from "@mui/icons-material";
 import { nanoid } from "nanoid";
-import DragOverlayModal from "./DragOverlayModal";
+import DragOverlayToast from "./DragOverlayToast";
 
 interface Props {
   onSend: (text: string, attachments: IAttachment[]) => void;
@@ -55,13 +55,17 @@ const UploaderBar: React.FC<Props> = ({ onSend }) => {
   const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragOver(false);
-    setShowDragModal(false);
+    setTimeout(() => {
+      setShowDragModal(false);
+    }, 2000);
   };
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setDragOver(false);
-    setShowDragModal(false);
+    setTimeout(() => {
+      setShowDragModal(false);
+    }, 2000);
 
     const files = e.dataTransfer?.files;
     if (files && files.length > 0) {
@@ -130,7 +134,7 @@ const UploaderBar: React.FC<Props> = ({ onSend }) => {
       </Button>
       {/* Optional: Render drag-overlay when dragOver is true */}
       {showDragModal ? (
-        <DragOverlayModal onClose={() => setShowDragModal(false)} />
+        <DragOverlayToast message="Bonus Unlocked: Drag & Drop!" />
       ) : null}
       {attachments.map((attachment) => (
         <img
